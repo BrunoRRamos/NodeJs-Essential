@@ -11,7 +11,7 @@ async function catchArchiveAsync(archiveRoute) {
     try {
         const text = await fs.promises.readFile(archiveRoute, encoding);
         const relarionLinks = extractLinks(text);
-        console.log(relarionLinks);
+        return relarionLinks;
     } catch (error) {
         catchError(error);
     }
@@ -34,5 +34,4 @@ function extractLinks(text) {
     return links;
 }
 
-const archiveRoute = './text.md';
-catchArchiveAsync(archiveRoute)
+export default catchArchiveAsync;
