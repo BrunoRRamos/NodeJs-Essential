@@ -5,18 +5,6 @@ function catchError(error) {
     throw new Error(chalk.red(error.code, "Reading Error"));
 }
 
-//Lê uim arquivo .md e retorna um array com objetos {nomeLink : link}.
-async function catchArchiveAsync(archiveRoute) {
-    const encoding = 'utf-8';
-    try {
-        const text = await fs.promises.readFile(archiveRoute, encoding);
-        const relarionLinks = extractLinks(text);
-        return relarionLinks;
-    } catch (error) {
-        catchError(error);
-    }
-}
-
 //Cria um array com {nomeLink : link}.
 function createLinkObj(arr) {
     let arrLinks = [];
@@ -30,8 +18,21 @@ function createLinkObj(arr) {
 function extractLinks(text) {
     const regex = /\[([^[\]]*?)\]\((https?:\/\/[^\s?#.].[^\s]*)\)/gm;
     const catches = [...text.matchAll(regex)];
-    const links = createLinkObj(catches)
-    return links;
+    const resultTest = catches.map(captura => ({[captura[1]]: captura[2]}))
+    //return createLinkObj(catches);
+    return resultTest.length !== 0 ? resultTest : "0 links";
+}
+
+//Lê uim arquivo .md e retorna um array com objetos {nomeLink : link}.
+async function catchArchiveAsync(archiveRoute) {
+    const encoding = 'utf-8';
+    try {
+        const text = await fs.promises.readFile(archiveRoute, encoding);
+        const relarionLinks = extractLinks(text);
+        return relarionLinks;
+    } catch (error) {
+        catchError(error);
+    }
 }
 
 export default catchArchiveAsync;
