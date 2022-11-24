@@ -9,7 +9,7 @@ function noLinks(error) {
 }
 
 async function logLinkInfo(args) {
-    const infoLinks = await catchArchiveAsync(way)
+    const infoLinks = await catchArchiveAsync(args)
         if (infoLinks.length === 0) {
             console.log(chalk.yellow("Link list"), chalk.red("No links"));
         } else {
@@ -22,12 +22,13 @@ async function logLinkInfo(args) {
 async function textProcess(args) {
     const way = args[2]
 
-    if (fs.lstatSync(args).isFile()) {
-        logLinkInfo(way)
+    if (fs.lstatSync(way).isFile()) {
+        return await logLinkInfo(way);
     } 
     
     else if (fs.lstatSync(args).isDirectory()) {
-
+        const archives = fs.promises.readdir(way)
+        
     }
 
  }
