@@ -4,8 +4,11 @@ import catchArchiveAsync from './index.js';
 
 const way = process.argv;
 
-function printList(result) {
-    console.log(chalk.yellow("Link List:"), result)
+function printList(result, identify) {
+    console.log(
+        chalk.yellow("Link List:"),
+        chalk.bgBlack.bgGreen(identify),
+        result)
 }
 
 function noLinks(error) {
@@ -48,12 +51,13 @@ async function textProcess(args) {
         return await logLinkInfo(way);
     } 
     
-    else if (fs.lstatSync(args).isDirectory()) {
-        const archives = fs.promises.readdir(way)
+    else if (fs.lstatSync(way).isDirectory()) {
+        const archives = await fs.promises.readdir(way)
         
-        archives.array.forEach(async (archiveName) => {
+        archives
+        .forEach(async (archiveName) => {
             const list = await catchArchiveAsync(`${way}/${archiveName}`)
-            printList(list)
+            printList(list, archiveName);
         });
     }
 }
