@@ -1,0 +1,1 @@
+verificar se o algoritmo lê este arquivo que nao é .md

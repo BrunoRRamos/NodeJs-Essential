@@ -5,14 +5,12 @@ import catchArchiveAsync from './index.js';
 const way = process.argv;
 
 function printList(result, identify = "") {
-    console.log(
-        chalk.yellow("Link List:"),
-        chalk.bgBlack.bgGreen(identify),
-        result)
-}
-
-function noLinks(error) {
-    throw new Error(chalk.red(error.code, "Não há links."))
+    if (result.length != 0) {
+        console.log(
+            chalk.yellow("Link List:"),
+            chalk.bgBlack.bgGreen(identify),
+            result)
+    }
 }
 
 function noSutchFile(error) {
