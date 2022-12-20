@@ -4,7 +4,7 @@ import catchArchiveAsync from './index.js';
 
 const way = process.argv;
 
-function printList(result, identify) {
+function printList(result, identify = "") {
     console.log(
         chalk.yellow("Link List:"),
         chalk.bgBlack.bgGreen(identify),
@@ -27,28 +27,13 @@ function verifyWay(way) {
     }
 }
 
-async function logLinkInfo(args) {
-    verifyWay(args);
-    const infoLinks = await catchArchiveAsync(args)
-
-        if (infoLinks.length === 0) {
-            console.log(chalk.yellow("Link list"), chalk.red("No links"));
-
-        } else {
-            console.log(chalk.yellow("Link list"));
-            infoLinks
-            .forEach(Element => {
-                console.log(chalk.green(JSON.stringify(Element)))
-            })
-        }
-}
-
 async function textProcess(args) {
     const way = args[2];
     verifyWay(way);
 
     if (fs.lstatSync(way).isFile()) {
-        return await logLinkInfo(way);
+        const result = await catchArchiveAsync(way);
+        printList(result)
     } 
     
     else if (fs.lstatSync(way).isDirectory()) {
