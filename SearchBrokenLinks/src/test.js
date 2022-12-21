@@ -1,4 +1,4 @@
-const links = ["https://www.gov.br/saude/pt-br"]
+const links = ["https://gatinhosalsicha.com.br/"]
 
 async function test(links) {
     links.forEach(async (element) => {
