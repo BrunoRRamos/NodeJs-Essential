@@ -1,11 +1,18 @@
 import chalk from 'chalk';
 import fs from 'fs';
 import catchArchiveAsync from './index.js';
+import validedList from './http-valid.js';
 
 const way = process.argv;
 
-function printList(result, identify = "") {
-    if (result.length != 0) {
+function printList(valid = "", result, identify = "") {
+    if (valid) {
+        console.log(
+            chalk.yellow("Valided link list:"),
+            chalk.bgBlack.bgGreen(identify),
+            validedList(result))
+
+    } else if (result.length != 0) {
         console.log(
             chalk.yellow("Link List:"),
             chalk.bgBlack.bgGreen(identify),
@@ -27,11 +34,13 @@ function verifyWay(way) {
 
 async function textProcess(args) {
     const way = args[2];
+    const valid = args[3] === "--valid";
+
     verifyWay(way);
 
     if (fs.lstatSync(way).isFile()) {
         const result = await catchArchiveAsync(way);
-        printList(result)
+        printList(valid, result)
     } 
     
     else if (fs.lstatSync(way).isDirectory()) {
@@ -40,7 +49,7 @@ async function textProcess(args) {
         archives
         .forEach(async (archiveName) => {
             const list = await catchArchiveAsync(`${way}/${archiveName}`)
-            printList(list, archiveName);
+            printList(valid, list, archiveName);
         });
     }
 }
